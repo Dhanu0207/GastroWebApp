@@ -28,9 +28,9 @@ public class User {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @Column(nullable = false)
-    private Email email;
+    @Email
+    @Column(nullable = false,unique = true)
+    private String email;
 
     @Column(name = "phone_number",nullable = false,unique = true)
     private String phoneNumber;
@@ -47,7 +47,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles"
-            , joinColumns = @JoinColumn(name = "user_id"),
+            ,joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id")
     )
     private Set<Role>  roles=new HashSet<>();
