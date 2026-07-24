@@ -1,9 +1,9 @@
-package com.fooddelivery.foodbackend.service;
+package com.fooddelivery.foodbackend.service.serviceimpl;
 
-import com.fooddelivery.foodbackend.dto.LoginRequest;
-import com.fooddelivery.foodbackend.dto.LoginResponse;
-import com.fooddelivery.foodbackend.dto.RegisterRequest;
-import com.fooddelivery.foodbackend.dto.UserResponse;
+import com.fooddelivery.foodbackend.dto.request.LoginRequest;
+import com.fooddelivery.foodbackend.dto.response.LoginResponse;
+import com.fooddelivery.foodbackend.dto.request.RegisterRequest;
+import com.fooddelivery.foodbackend.dto.response.UserResponse;
 import com.fooddelivery.foodbackend.entity.AppRole;
 import com.fooddelivery.foodbackend.entity.Role;
 import com.fooddelivery.foodbackend.entity.User;
@@ -13,6 +13,7 @@ import com.fooddelivery.foodbackend.repository.RoleRepository;
 import com.fooddelivery.foodbackend.repository.UserRepository;
 import com.fooddelivery.foodbackend.security.CustomUserDetails;
 import com.fooddelivery.foodbackend.security.JwtService;
+import com.fooddelivery.foodbackend.service.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;

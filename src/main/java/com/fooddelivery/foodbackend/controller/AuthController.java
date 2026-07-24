@@ -1,10 +1,10 @@
 package com.fooddelivery.foodbackend.controller;
 
-import com.fooddelivery.foodbackend.dto.LoginRequest;
-import com.fooddelivery.foodbackend.dto.LoginResponse;
-import com.fooddelivery.foodbackend.dto.RegisterRequest;
-import com.fooddelivery.foodbackend.dto.UserResponse;
-import com.fooddelivery.foodbackend.service.AuthService;
+import com.fooddelivery.foodbackend.dto.request.LoginRequest;
+import com.fooddelivery.foodbackend.dto.response.LoginResponse;
+import com.fooddelivery.foodbackend.dto.request.RegisterRequest;
+import com.fooddelivery.foodbackend.dto.response.UserResponse;
+import com.fooddelivery.foodbackend.service.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
