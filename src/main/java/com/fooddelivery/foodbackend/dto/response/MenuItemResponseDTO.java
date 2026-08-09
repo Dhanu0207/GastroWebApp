@@ -17,6 +17,14 @@ public class MenuItemResponseDTO {
 
     private String description;
 
+    private Long categoryId;
+
+    private String categoryName;
+
+    private Long restaurantId;
+
+    private String restaurantName;
+
     private BigDecimal price;
 
     private Boolean available;

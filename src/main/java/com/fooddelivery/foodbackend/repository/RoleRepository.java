@@ -1,6 +1,6 @@
 package com.fooddelivery.foodbackend.repository;
 
-import com.fooddelivery.foodbackend.entity.AppRole;
+import com.fooddelivery.foodbackend.entity.enums.AppRole;
 import com.fooddelivery.foodbackend.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 

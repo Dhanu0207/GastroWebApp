@@ -1,5 +1,6 @@
 package com.fooddelivery.foodbackend.dto.request;
 
+import com.fooddelivery.foodbackend.entity.Category;
 import jakarta.validation.constraints.*;
 import lombok.*;
 

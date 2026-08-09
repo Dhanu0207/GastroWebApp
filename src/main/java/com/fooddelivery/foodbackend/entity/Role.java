@@ -1,4 +1,5 @@
 package com.fooddelivery.foodbackend.entity;
+import com.fooddelivery.foodbackend.entity.enums.AppRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

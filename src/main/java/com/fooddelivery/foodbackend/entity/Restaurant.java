@@ -92,4 +92,6 @@ public class Restaurant {
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    @OneToMany(mappedBy = "restaurant")
+    private List<Order> orders = new ArrayList<>();
 }

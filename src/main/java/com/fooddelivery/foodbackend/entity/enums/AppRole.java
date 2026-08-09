@@ -1,4 +1,4 @@
-package com.fooddelivery.foodbackend.entity;
+package com.fooddelivery.foodbackend.entity.enums;
 
 public enum AppRole {
     ROLE_USER,

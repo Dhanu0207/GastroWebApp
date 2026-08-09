@@ -148,10 +148,10 @@ public class MenuItemServiceImpl implements MenuItemService {
                 .isVeg(menuItem.getIsVeg())
                 .available(menuItem.getAvailable())
                 .imageUrl(menuItem.getImageUrl())
-//                .categoryId(menuItem.getCategory().getCategoryId())
-//                .categoryName(menuItem.getCategory().getCategoryName())
-//                .restaurantId(menuItem.getRestaurant().getRestaurantId())
-//                .restaurantName(menuItem.getRestaurant().getRestaurantName())
+                .categoryId(menuItem.getCategory().getCategoryId())
+                .categoryName(menuItem.getCategory().getCategoryName())
+                .restaurantId(menuItem.getRestaurant().getRestaurantId())
+                .restaurantName(menuItem.getRestaurant().getRestaurantName())
                 .build();
     }
 }

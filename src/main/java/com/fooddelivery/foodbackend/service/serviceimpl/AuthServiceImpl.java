@@ -4,7 +4,7 @@ import com.fooddelivery.foodbackend.dto.request.LoginRequest;
 import com.fooddelivery.foodbackend.dto.response.LoginResponse;
 import com.fooddelivery.foodbackend.dto.request.RegisterRequest;
 import com.fooddelivery.foodbackend.dto.response.UserResponse;
-import com.fooddelivery.foodbackend.entity.AppRole;
+import com.fooddelivery.foodbackend.entity.enums.AppRole;
 import com.fooddelivery.foodbackend.entity.Role;
 import com.fooddelivery.foodbackend.entity.User;
 import com.fooddelivery.foodbackend.exception.BadRequestException;
@@ -21,6 +21,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -70,9 +73,31 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        String token = jwtService.generateToken(
-                new CustomUserDetails(user)
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put(
+                "roles",
+                user.getRoles()
+                        .stream()
+                        .map(role -> role.getRoleName().name())
+                        .toList()
         );
+
+        claims.put(
+                "firstName",
+                user.getFirstName()
+        );
+
+        claims.put(
+                "lastName",
+                user.getLastName()
+        );
+
+        String token =
+                jwtService.generateToken(
+                        claims,
+                        new CustomUserDetails(user)
+                );
         return new LoginResponse(token,"Bearer");
     }
 

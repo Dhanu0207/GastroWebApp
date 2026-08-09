@@ -1,6 +1,6 @@
 package com.fooddelivery.foodbackend.config;
 
-import com.fooddelivery.foodbackend.entity.AppRole;
+import com.fooddelivery.foodbackend.entity.enums.AppRole;
 import com.fooddelivery.foodbackend.entity.Role;
 import com.fooddelivery.foodbackend.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;

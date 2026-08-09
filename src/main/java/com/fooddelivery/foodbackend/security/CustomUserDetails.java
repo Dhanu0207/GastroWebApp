@@ -93,6 +93,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getEnabled();   // or user.isEnabled(), depending on your User entity
+        return user.getEnabled();
     }
 }
