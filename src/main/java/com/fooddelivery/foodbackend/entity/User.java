@@ -48,7 +48,7 @@ public class User {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
+    git add .
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
