@@ -31,6 +31,8 @@ public class RestaurantResponseDTO {
 
     private Boolean isOpen;
 
+    private Boolean isApproved;
+
     private Double rating;
 
 }

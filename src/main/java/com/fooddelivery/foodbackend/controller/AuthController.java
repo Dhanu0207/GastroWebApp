@@ -15,27 +15,39 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final AuthService authService;
 
+    /** Register a new customer account. */
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(
-            @Valid @RequestBody RegisterRequest request
-            ){
-        UserResponse response = authService.register(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+            @Valid @RequestBody RegisterRequest request) {
+        return new ResponseEntity<>(authService.register(request), HttpStatus.CREATED);
     }
+
+    /**
+     * Register as a restaurant owner.
+     * Account is assigned ROLE_RESTAURANT_OWNER. The owner can then create
+     * a restaurant (which requires admin approval before going live).
+     */
+    @PostMapping("/register-restaurant-owner")
+    public ResponseEntity<UserResponse> registerRestaurantOwner(
+            @Valid @RequestBody RegisterRequest request) {
+        return new ResponseEntity<>(
+                authService.registerRestaurantOwner(request),
+                HttpStatus.CREATED);
+    }
+
+    /** Login with email and password — returns a JWT Bearer token. */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
-            @Valid @RequestBody LoginRequest request
-    ){
-        LoginResponse response = authService.login(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-
+            @Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
-    @GetMapping("/me")
-    public ResponseEntity<UserResponse> getCurrentUser(){
-        UserResponse userResponse = authService.getCurrentUser();
 
-        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+    /** Get the currently authenticated user's profile. */
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser() {
+        return ResponseEntity.ok(authService.getCurrentUser());
     }
 }

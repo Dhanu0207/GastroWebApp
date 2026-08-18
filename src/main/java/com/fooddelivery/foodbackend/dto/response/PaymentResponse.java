@@ -19,4 +19,5 @@ public class PaymentResponse {
     private BigDecimal amount;
     private String currency;
     private PaymentStatus paymentStatus;
+    private BigDecimal refundAmount;
 }

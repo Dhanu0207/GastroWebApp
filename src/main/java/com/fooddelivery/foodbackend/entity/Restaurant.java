@@ -1,16 +1,17 @@
 package com.fooddelivery.foodbackend.entity;
 
 import jakarta.persistence.*;
-//import jdk.jfr.Category;
 import lombok.*;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "restaurants")
+@Table(name = "restaurants", indexes = {
+        @Index(name = "idx_restaurant_approved_open", columnList = "is_approved, is_open"),
+        @Index(name = "idx_restaurant_city",          columnList = "city")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,53 +46,49 @@ public class Restaurant {
     @Column(length = 1000)
     private String description;
 
+    /** Whether the restaurant is currently accepting orders. */
+    @Builder.Default
     @Column(nullable = false)
-    private Boolean isOpen = true;
+    private Boolean isOpen = false;
 
+    /** Set to true by admin after review. Only approved restaurants are visible publicly. */
+    @Builder.Default
     @Column(nullable = false)
     private Boolean isApproved = false;
 
+    @Builder.Default
     private Double rating = 0.0;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
 
-
-
-    @OneToMany(
-            mappedBy = "restaurant",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Category> categories = new ArrayList<>();
 
-
-    @OneToMany(
-            mappedBy = "restaurant",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<MenuItem> menuItems = new ArrayList<>();
 
+    @OneToMany(mappedBy = "restaurant")
+    @Builder.Default
+    private List<Order> orders = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        updatedAt  = LocalDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
-    @OneToMany(mappedBy = "restaurant")
-    private List<Order> orders = new ArrayList<>();
 }

@@ -38,4 +38,16 @@ public class PaymentController {
         return ResponseEntity.ok(
                 paymentService.getPaymentByOrderId(orderId));
     }
+
+    /**
+     * Request a full refund for a paid order via Razorpay.
+     * Only the order owner can trigger this. Order must be in PAID status.
+     * Example: POST /api/payments/refund/101
+     */
+    @PostMapping("/refund/{orderId}")
+    public ResponseEntity<PaymentResponse> refundPayment(
+            @PathVariable Long orderId) {
+
+        return ResponseEntity.ok(paymentService.refundPayment(orderId));
+    }
 }

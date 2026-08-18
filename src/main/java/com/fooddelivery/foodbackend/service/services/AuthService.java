@@ -7,6 +7,7 @@ import com.fooddelivery.foodbackend.dto.response.UserResponse;
 
 public interface AuthService {
     UserResponse register(RegisterRequest registerRequest);
+    UserResponse registerRestaurantOwner(RegisterRequest registerRequest);
     LoginResponse login(LoginRequest loginRequest);
     UserResponse getCurrentUser();
 }

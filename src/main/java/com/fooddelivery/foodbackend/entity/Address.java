@@ -47,6 +47,7 @@ public class Address {
     @Column(nullable = false)
     private AddressType addressType;
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean isDefault = false;
 
@@ -72,5 +73,6 @@ public class Address {
     }
 
     @OneToMany(mappedBy = "deliveryAddress")
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 }

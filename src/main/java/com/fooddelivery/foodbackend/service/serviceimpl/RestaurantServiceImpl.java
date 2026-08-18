@@ -5,17 +5,27 @@ import com.fooddelivery.foodbackend.dto.response.RestaurantResponseDTO;
 import com.fooddelivery.foodbackend.entity.Restaurant;
 import com.fooddelivery.foodbackend.exception.ResourceNotFoundException;
 import com.fooddelivery.foodbackend.repository.RestaurantRepository;
+import com.fooddelivery.foodbackend.security.SecurityUtils;
 import com.fooddelivery.foodbackend.service.services.RestaurantService;
+import com.fooddelivery.foodbackend.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final SecurityUtils securityUtils;
+    private final FileUploadUtil fileUploadUtil;
 
     @Override
     public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO request) {
@@ -33,70 +43,46 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .state(request.getState())
                 .pincode(request.getPincode())
                 .description(request.getDescription())
+                .owner(securityUtils.getCurrentUser())
+                .isApproved(false)   // requires admin approval
+                .isOpen(false)
                 .build();
 
-        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
-
-        return RestaurantResponseDTO.builder()
-                .restaurantId(savedRestaurant.getRestaurantId())
-                .restaurantName(savedRestaurant.getRestaurantName())
-                .email(savedRestaurant.getEmail())
-                .phoneNumber(savedRestaurant.getPhoneNumber())
-                .address(savedRestaurant.getAddress())
-                .city(savedRestaurant.getCity())
-                .state(savedRestaurant.getState())
-                .pincode(savedRestaurant.getPincode())
-                .description(savedRestaurant.getDescription())
-                .imageUrl(savedRestaurant.getImageUrl())
-                .isOpen(savedRestaurant.getIsOpen())
-                .rating(savedRestaurant.getRating())
-                .build();
+        return mapToResponse(restaurantRepository.save(restaurant));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RestaurantResponseDTO getRestaurantById(Long restaurantId) {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Restaurant not found with id : " + restaurantId));
 
-        return RestaurantResponseDTO.builder()
-                .restaurantId(restaurant.getRestaurantId())
-                .restaurantName(restaurant.getRestaurantName())
-                .email(restaurant.getEmail())
-                .phoneNumber(restaurant.getPhoneNumber())
-                .address(restaurant.getAddress())
-                .city(restaurant.getCity())
-                .state(restaurant.getState())
-                .pincode(restaurant.getPincode())
-                .description(restaurant.getDescription())
-                .imageUrl(restaurant.getImageUrl())
-                .isOpen(restaurant.getIsOpen())
-                .rating(restaurant.getRating())
-                .build();
+        return mapToResponse(restaurant);
+    }
+
+    /**
+     * Public listing — only approved & open restaurants, paginated, sorted by name.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<RestaurantResponseDTO> getAllRestaurants(int page, int size) {
+
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("restaurantName").ascending());
+        return restaurantRepository
+                .findByIsApprovedTrueAndIsOpenTrue(pageable)
+                .map(this::mapToResponse);
     }
 
     @Override
-    public List<RestaurantResponseDTO> getAllRestaurants() {
+    @Transactional(readOnly = true)
+    public Page<RestaurantResponseDTO> searchRestaurants(String keyword, int page, int size) {
 
-        List<Restaurant> restaurants = restaurantRepository.findAll();
-
-        return restaurants.stream()
-                .map(restaurant -> RestaurantResponseDTO.builder()
-                        .restaurantId(restaurant.getRestaurantId())
-                        .restaurantName(restaurant.getRestaurantName())
-                        .email(restaurant.getEmail())
-                        .phoneNumber(restaurant.getPhoneNumber())
-                        .address(restaurant.getAddress())
-                        .city(restaurant.getCity())
-                        .state(restaurant.getState())
-                        .pincode(restaurant.getPincode())
-                        .description(restaurant.getDescription())
-                        .imageUrl(restaurant.getImageUrl())
-                        .isOpen(restaurant.getIsOpen())
-                        .rating(restaurant.getRating())
-                        .build())
-                .toList();
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("restaurantName").ascending());
+        return restaurantRepository
+                .searchApprovedRestaurants(keyword, pageable)
+                .map(this::mapToResponse);
     }
 
     @Override
@@ -121,22 +107,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setPincode(request.getPincode());
         restaurant.setDescription(request.getDescription());
 
-        Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
-
-        return RestaurantResponseDTO.builder()
-                .restaurantId(updatedRestaurant.getRestaurantId())
-                .restaurantName(updatedRestaurant.getRestaurantName())
-                .email(updatedRestaurant.getEmail())
-                .phoneNumber(updatedRestaurant.getPhoneNumber())
-                .address(updatedRestaurant.getAddress())
-                .city(updatedRestaurant.getCity())
-                .state(updatedRestaurant.getState())
-                .pincode(updatedRestaurant.getPincode())
-                .description(updatedRestaurant.getDescription())
-                .imageUrl(updatedRestaurant.getImageUrl())
-                .isOpen(updatedRestaurant.getIsOpen())
-                .rating(updatedRestaurant.getRating())
-                .build();
+        return mapToResponse(restaurantRepository.save(restaurant));
     }
 
     @Override
@@ -147,6 +118,42 @@ public class RestaurantServiceImpl implements RestaurantService {
                         "Restaurant not found with id : " + restaurantId));
 
         restaurantRepository.delete(restaurant);
+    }
 
+    @Override
+    public RestaurantResponseDTO uploadRestaurantImage(Long restaurantId,
+                                                       MultipartFile file)
+            throws IOException {
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Restaurant not found with id : " + restaurantId));
+
+        if (restaurant.getImageUrl() != null) {
+            fileUploadUtil.deleteFile(restaurant.getImageUrl());
+        }
+
+        restaurant.setImageUrl(fileUploadUtil.uploadFile(file));
+        return mapToResponse(restaurantRepository.save(restaurant));
+    }
+
+    // ─── Mapping ─────────────────────────────────────────────────────────────
+
+    private RestaurantResponseDTO mapToResponse(Restaurant r) {
+        return RestaurantResponseDTO.builder()
+                .restaurantId(r.getRestaurantId())
+                .restaurantName(r.getRestaurantName())
+                .email(r.getEmail())
+                .phoneNumber(r.getPhoneNumber())
+                .address(r.getAddress())
+                .city(r.getCity())
+                .state(r.getState())
+                .pincode(r.getPincode())
+                .description(r.getDescription())
+                .imageUrl(r.getImageUrl())
+                .isOpen(r.getIsOpen())
+                .isApproved(r.getIsApproved())
+                .rating(r.getRating())
+                .build();
     }
 }

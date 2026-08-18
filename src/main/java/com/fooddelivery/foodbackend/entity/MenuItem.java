@@ -9,7 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "menu_items")
+@Table(
+    name = "menu_items",
+    indexes = {
+        @Index(name = "idx_menu_item_restaurant_available",
+               columnList = "restaurant_id, available"),
+        @Index(name = "idx_menu_item_category_available",
+               columnList = "category_id, available")
+    }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,6 +38,7 @@ public class MenuItem {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean available = true;
 
@@ -64,5 +73,6 @@ public class MenuItem {
     }
 
     @OneToMany(mappedBy = "menuItem")
+    @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
 }

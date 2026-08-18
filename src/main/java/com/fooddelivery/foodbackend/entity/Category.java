@@ -26,6 +26,7 @@ public class Category {
     @Column(length = 500)
     private String description;
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean isActive = true;
 
@@ -42,6 +43,7 @@ public class Category {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @Builder.Default
     private List<MenuItem> menuItems = new ArrayList<>();
 
     @PrePersist
