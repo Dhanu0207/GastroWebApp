@@ -38,3 +38,18 @@ frontend/dist/
 frontend/dist-ssr/
 frontend/*.local
 
+### Environment & Sensitive Credentials ###
+*.env
+*.env.*
+.env
+.env.local
+.env.*.local
+application-local.properties
+application-secret.properties
+application-dev.properties
+*.key
+*.pem
+*.keystore
+secrets/
+
+
