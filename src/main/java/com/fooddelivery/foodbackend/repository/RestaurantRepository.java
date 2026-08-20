@@ -24,7 +24,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     /** Admin listing — all restaurants (approved or not), paginated. */
     Page<Restaurant> findAll(Pageable pageable);
 
-    /** Search by name or city (case-insensitive). */
+
     @Query("""
             SELECT r FROM Restaurant r
             WHERE r.isApproved = true
@@ -35,6 +35,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             @Param("keyword") String keyword,
             Pageable pageable);
 
-    /** Used to find all restaurants pending admin approval. */
+
     List<Restaurant> findByIsApprovedFalse();
 }

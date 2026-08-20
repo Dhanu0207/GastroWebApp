@@ -38,7 +38,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    /** Whether this account is active. Admins can disable accounts. */
+
     @Builder.Default
     @Column(nullable = false)
     private Boolean enabled = true;
@@ -48,7 +48,6 @@ public class User {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-    git add .
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

@@ -1,0 +1,75 @@
+/* Glassmorphism & Ambient Glow Tokens */
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5), 0 0 25px -5px rgba(255, 94, 30, 0.15);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+.glass-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 94, 30, 0.7);
+  box-shadow: 0 0 20px rgba(255, 94, 30, 0.25);
+}
+
+.glass-button-primary {
+  background: linear-gradient(135deg, #FF5E1E 0%, #FF8A00 100%);
+  box-shadow: 0 4px 20px rgba(255, 94, 30, 0.4);
+  transition: all 0.25s ease;
+}
+.glass-button-primary:hover {
+  box-shadow: 0 6px 28px rgba(255, 94, 30, 0.6);
+  transform: translateY(-1px) scale(1.02);
+}
+.glass-button-primary:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+.glass-pill:hover, .glass-pill.active {
+  background: rgba(255, 94, 30, 0.15);
+  border-color: rgba(255, 94, 30, 0.5);
+  color: #ff8a00;
+}
+
+/* Custom Scrollbar for sleek dark look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0d14;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
