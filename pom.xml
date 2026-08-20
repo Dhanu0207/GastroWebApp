@@ -11,8 +11,8 @@
 	<groupId>com.fooddelivery</groupId>
 	<artifactId>foodbackend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>gastrofullstack</name>
+	<description>Gastro - Next-Gen Full Stack Food Delivery Platform</description>
 	<url/>
 	<licenses>
 		<license/>
